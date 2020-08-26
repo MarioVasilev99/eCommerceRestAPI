@@ -8,7 +8,7 @@
     {
         User AuthenticateUser(UserLoginDto loginCredentials);
 
-        string GenerateJWTToken(UserLoginDto userInfo);
+        string GenerateJWTToken(User user);
 
         Task<bool> ValidateCurrencyCodeAsync(string currencyCode);
 

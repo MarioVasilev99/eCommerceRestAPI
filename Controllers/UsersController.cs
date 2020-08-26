@@ -30,7 +30,7 @@
 
             if (user != null)
             {
-                var tokenString = this.usersService.GenerateJWTToken(login);
+                var tokenString = this.usersService.GenerateJWTToken(user);
                 response = Ok(new
                 {
                     token = tokenString,

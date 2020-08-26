@@ -4,6 +4,11 @@
 
     public class Product
     {
+        public Product()
+        {
+            this.Orders = new HashSet<OrderProduct>();
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }

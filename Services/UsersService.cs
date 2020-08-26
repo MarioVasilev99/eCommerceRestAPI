@@ -37,16 +37,15 @@
         }
 
         // This method generates a JWT Token string.
-        public string GenerateJWTToken(UserLoginDto userInfo)
+        public string GenerateJWTToken(User user)
         {
             var jwtSection = this.configuration.GetSection("JWTSettings");
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection.GetSection("SecretKey").Value));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userInfo.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
             var token = new JwtSecurityToken(

@@ -14,5 +14,7 @@
         Task CreateProductAsync(ProductCreationDto productInfo);
 
         Task DeleteProductAsync(Product product);
+
+        Task<decimal> GetProductPriceAsync(int productId);
     }
 }

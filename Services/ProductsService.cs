@@ -42,5 +42,16 @@
         {
             return await this.dbContext.Products.FirstOrDefaultAsync(p => p.Id == productId);
         }
+
+        public async Task<decimal> GetProductPriceAsync(int productId)
+        {
+            var productPrice = await this.dbContext
+                .Products
+                .Where(p => p.Id == productId)
+                .Select(p => p.Price)
+                .FirstOrDefaultAsync();
+
+            return productPrice;
+        }
     }
 }

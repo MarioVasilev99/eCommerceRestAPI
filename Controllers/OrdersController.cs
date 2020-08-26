@@ -1,8 +1,10 @@
 ﻿namespace eCommerceRestAPI.Controllers
 {
+    using eCommerceRestAPI.Dtos.Input.Orders;
     using eCommerceRestAPI.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
 
     [ApiController]
     [Route("api/[controller]")]
@@ -17,9 +19,18 @@
 
         [HttpPost("Create")]
         [Authorize]
-        public IActionResult CreateOrder()
+        public async Task<IActionResult> CreateOrder([FromBody]CreateOrderDto orderProductsInfo)
         {
-            return null;
+            int userId = this.GetUserId();
+            bool productsValid = await this.ordersService.ValidateProductsAsync(orderProductsInfo);
+
+            if (!productsValid)
+            {
+                return this.BadRequest("Product Id does not exist.");
+            }
+
+            await this.ordersService.CreateOrderAsync(userId, orderProductsInfo);
+            return this.Ok();
         }
     }
 }
