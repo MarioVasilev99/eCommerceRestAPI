@@ -18,9 +18,23 @@
 
         public DbSet<Order> Orders { get; set; }
 
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Orders Products Many-to-Many Relationship Configuration
+            modelBuilder.Entity<OrderProduct>()
+                .HasKey(op => new { op.OrderId, op.ProductId });
+            modelBuilder.Entity<OrderProduct>()
+                .HasOne(op => op.Product)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(op => op.ProductId);
+            modelBuilder.Entity<OrderProduct>()
+                .HasOne(op => op.Order)
+                .WithMany(o => o.Products)
+                .HasForeignKey(op => op.OrderId);
 
             // Code to seed data
             modelBuilder.Entity<Product>().HasData(

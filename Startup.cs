@@ -55,6 +55,7 @@ namespace eCommerceRestAPI
             // User defined services
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<IOrdersService, OrdersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

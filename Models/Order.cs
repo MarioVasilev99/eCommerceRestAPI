@@ -12,7 +12,7 @@
 
         public virtual User User { get; set; }
 
-        public virtual List<Product> Products { get; set; }
+        public virtual ICollection<OrderProduct> Products { get; set; }
 
         public decimal TotalPrice { get; set; }
 

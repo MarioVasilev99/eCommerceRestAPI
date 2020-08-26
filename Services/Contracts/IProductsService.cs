@@ -12,5 +12,7 @@
         Task<Product> GetProductByIdAsync(int productId);
 
         Task CreateProductAsync(ProductCreationDto productInfo);
+
+        Task DeleteProductAsync(Product product);
     }
 }

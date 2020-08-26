@@ -30,6 +30,12 @@
             await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteProductAsync(Product productToDelete)
+        {
+            this.dbContext.Products.Remove(productToDelete);
+            await this.dbContext.SaveChangesAsync();
+        }
+
         public async Task<List<Product>> GetAllProductsAsync() => await this.dbContext.Products.ToListAsync();
 
         public async Task<Product> GetProductByIdAsync(int productId)
