@@ -1,6 +1,6 @@
 ﻿namespace eCommerceRestAPI.Services.Contracts
 {
-    using eCommerceRestAPI.Dtos.Input;
+    using eCommerceRestAPI.Dtos.Input.Users;
     using eCommerceRestAPI.Models;
     using System.Threading.Tasks;
 

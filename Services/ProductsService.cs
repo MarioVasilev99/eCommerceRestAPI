@@ -1,9 +1,12 @@
 ﻿namespace eCommerceRestAPI.Services
 {
+    using eCommerceRestAPI.Dtos.Input.Products;
     using eCommerceRestAPI.Models;
     using eCommerceRestAPI.Services.Contracts;
+    using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public class ProductsService : IProductsService
     {
@@ -14,6 +17,24 @@
             this.dbContext = dbContext;
         }
 
-        public List<Product> GetAllProducts() => this.dbContext.Products.ToList();
+        public async Task CreateProductAsync(ProductCreationDto productInfo)
+        {
+            Product newProduct = new Product()
+            {
+                Name = productInfo.Name,
+                Price = productInfo.Price,
+                ImageUrl = productInfo.ImageUrl,
+            };
+
+            await this.dbContext.AddAsync(newProduct);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<Product>> GetAllProductsAsync() => await this.dbContext.Products.ToListAsync();
+
+        public async Task<Product> GetProductByIdAsync(int productId)
+        {
+            return await this.dbContext.Products.FirstOrDefaultAsync(p => p.Id == productId);
+        }
     }
 }

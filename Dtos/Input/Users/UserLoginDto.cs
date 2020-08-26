@@ -1,4 +1,4 @@
-﻿namespace eCommerceRestAPI.Dtos.Input
+﻿namespace eCommerceRestAPI.Dtos.Input.Users
 {
     public class UserLoginDto
     {

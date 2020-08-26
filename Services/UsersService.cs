@@ -1,6 +1,6 @@
 ﻿namespace eCommerceRestAPI.Services
 {
-    using eCommerceRestAPI.Dtos.Input;
+    using eCommerceRestAPI.Dtos.Input.Users;
     using eCommerceRestAPI.Models;
     using eCommerceRestAPI.Services.Contracts;
     using Microsoft.Extensions.Configuration;

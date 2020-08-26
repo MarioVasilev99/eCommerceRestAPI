@@ -1,6 +1,6 @@
 ﻿namespace eCommerceRestAPI.Controllers
 {
-    using eCommerceRestAPI.Dtos.Input;
+    using eCommerceRestAPI.Dtos.Input.Users;
     using eCommerceRestAPI.Models;
     using eCommerceRestAPI.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
