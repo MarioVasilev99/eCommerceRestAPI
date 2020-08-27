@@ -2,7 +2,6 @@
 {
     using eCommerceRestAPI.Dtos.Input.Orders;
     using eCommerceRestAPI.Dtos.Output;
-    using eCommerceRestAPI.Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -13,5 +12,7 @@
         Task CreateOrderAsync(int userId, CreateOrderDto orderProducts);
 
         Task<List<OrderOutputDto>> GetUserOrdersAsync(int userId);
+
+        Task<decimal> GetConvertedLocalCurrencySum(decimal orderTotalPriceInBgn, int userId);
     }
 }

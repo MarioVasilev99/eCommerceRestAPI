@@ -6,9 +6,11 @@
     using eCommerceRestAPI.Models.Enums;
     using eCommerceRestAPI.Services.Contracts;
     using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
 
     public class OrdersService : IOrdersService
@@ -50,11 +52,50 @@
                 orderTotalPrice += await this.productsService.GetProductPriceAsync(productId);
             }
 
-            // Assign the calcuated total price to the newly created order.
-            newOrder.TotalPrice = orderTotalPrice;
+            //TODO: change total price to local currency of the user.
+            var convertedTotalSum = await this.GetConvertedLocalCurrencySum(orderTotalPrice, userId);
+
+            // Assign the calculated and converted to local currency total price to the newly created order.
+            newOrder.TotalPrice = convertedTotalSum;
 
             // Save changes to db.
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<decimal> GetConvertedLocalCurrencySum(decimal orderTotalPriceInBgn, int userId)
+        {
+            var userCurrencyInfo = await this.dbContext
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(u => new
+                {
+                    Code = u.CurrencyCode
+                })
+                .FirstOrDefaultAsync();
+
+
+            if (userCurrencyInfo.Code == "BGN")
+            {
+                return orderTotalPriceInBgn;
+            }
+
+            var convertedTotalSum = 0.0m;
+            var getCurrencyRatesUrl = "https://api.exchangeratesapi.io/latest?base=BGN";
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(getCurrencyRatesUrl))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseJson = await response.Content.ReadAsStringAsync();
+                        var currencyRates = JsonConvert.DeserializeObject<CurrencyRatesResponseDto>(responseJson);
+                        var localCurrencyRate = currencyRates.Rates[userCurrencyInfo.Code];
+                        convertedTotalSum = orderTotalPriceInBgn * localCurrencyRate;
+                    }
+                }
+            }
+
+            return convertedTotalSum;
         }
 
         public async Task<List<OrderOutputDto>> GetUserOrdersAsync(int userId)
@@ -69,7 +110,7 @@
                     UserName = o.User.Username,
                     ProductNames = o.Products.Select(p => p.Product.Name).ToList(),
                     Status = o.Status.ToString(),
-                    TotalPrice = o.TotalPrice,
+                    TotalPrice = $"{o.TotalPrice} {o.User.CurrencyCode}",
                     CreatedAt = o.CreatedAt.ToString("f"),
                 })
                 .ToListAsync();

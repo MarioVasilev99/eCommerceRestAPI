@@ -13,7 +13,7 @@ namespace eCommerceRestAPI.Dtos.Output
 
         public List<string> ProductNames { get; set; }
 
-        public decimal TotalPrice { get; set; }
+        public string TotalPrice { get; set; }
 
         public string Status { get; set; }
 
