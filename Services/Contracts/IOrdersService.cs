@@ -14,5 +14,13 @@
         Task<List<OrderOutputDto>> GetUserOrdersAsync(int userId);
 
         Task<decimal> GetConvertedLocalCurrencySum(decimal orderTotalPriceInBgn, int userId);
+
+        Task<bool> ValidateUserAsync(int userId, int orderId);
+
+        Task<bool> ValidateOrderIdAsync(int orderId);
+
+        bool ValidateOrderStatus(string newOrderStatus);
+
+        Task ChangeOrderStatusAsync(int orderId, string newStatus);
     }
 }

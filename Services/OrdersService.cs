@@ -34,6 +34,7 @@
                 CreatedAt = DateTime.UtcNow,
             };
 
+            // Add the order to DB in order to be able to access its newly assigned id.
             await this.dbContext.Orders.AddAsync(newOrder);
 
             var orderTotalPrice = 0.0m;
@@ -52,7 +53,7 @@
                 orderTotalPrice += await this.productsService.GetProductPriceAsync(productId);
             }
 
-            //TODO: change total price to local currency of the user.
+            // Converts the total sum from BGN currency to the users local currency.
             var convertedTotalSum = await this.GetConvertedLocalCurrencySum(orderTotalPrice, userId);
 
             // Assign the calculated and converted to local currency total price to the newly created order.
@@ -64,6 +65,7 @@
 
         public async Task<decimal> GetConvertedLocalCurrencySum(decimal orderTotalPriceInBgn, int userId)
         {
+            // Gets the user currency code
             var userCurrencyInfo = await this.dbContext
                 .Users
                 .Where(u => u.Id == userId)
@@ -73,12 +75,13 @@
                 })
                 .FirstOrDefaultAsync();
 
-
+            // If the users local currency is BGN then conversion is not needed.
             if (userCurrencyInfo.Code == "BGN")
             {
                 return orderTotalPriceInBgn;
             }
 
+            // Gets the users currency current rate and converts the order total sum.
             var convertedTotalSum = 0.0m;
             var getCurrencyRatesUrl = "https://api.exchangeratesapi.io/latest?base=BGN";
             using (var httpClient = new HttpClient())
@@ -133,6 +136,37 @@
             }
 
             return productsValid;
+        }
+
+        public async Task<bool> ValidateOrderIdAsync(int orderId)
+        {
+            return await this.dbContext.Orders.AnyAsync(o => o.Id == orderId);
+        }
+
+        public async Task<bool> ValidateUserAsync(int userId, int orderId)
+        {
+            var orderUserId = await this.dbContext
+                .Orders
+                .Where(o => o.Id == orderId)
+                .Select(o => o.UserId)
+                .FirstOrDefaultAsync();
+
+            return orderUserId == userId;
+        }
+
+        public bool ValidateOrderStatus(string newOrderStatus)
+        {
+            bool isValid = Enum.IsDefined(typeof(StatusEnum), newOrderStatus);
+            return isValid;
+        }
+
+        public async Task ChangeOrderStatusAsync(int orderId, string newStatus)
+        {
+            var order = await this.dbContext.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
+            var statusEnum = (StatusEnum)Enum.Parse(typeof(StatusEnum), newStatus);
+
+            order.Status = statusEnum;
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }
