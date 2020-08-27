@@ -52,14 +52,12 @@
             //TODO: Simplify if else
             if (!isCurrencyCodeValid)
             {
-                //TODO: Remove magic string
-                return this.BadRequest("Currency code not valid.");
+                return this.BadRequest(ExceptionsHelper.CurrencyCodeNotValid);
             }
             else if (string.IsNullOrEmpty(register.Username) ||
                      string.IsNullOrEmpty(register.Password))
             {
-                //TODO: Remove magic string
-                return this.BadRequest("The username or password is incorrect.");
+                return this.BadRequest(ExceptionsHelper.UsernamePasswordIncorrect);
             }
             else
             {

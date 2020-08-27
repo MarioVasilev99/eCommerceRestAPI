@@ -39,7 +39,7 @@
             var product = await this.productsService.GetProductByIdAsync(id);
             if (product == null)
             {
-                return this.NotFound();
+                return this.NotFound(ExceptionsHelper.ProductNotExist);
             }
 
             return this.Ok(product);
@@ -66,7 +66,7 @@
 
             if (productToDelete == null)
             {
-                return this.NotFound();
+                return this.NotFound(ExceptionsHelper.ProductNotExist);
             }
 
             await this.productsService.DeleteProductAsync(productToDelete);

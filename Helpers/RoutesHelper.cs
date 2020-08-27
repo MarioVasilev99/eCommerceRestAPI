@@ -1,6 +1,6 @@
 ﻿namespace eCommerceRestAPI.Helpers
 {
-    public class RoutesHelper
+    public static class RoutesHelper
     {
         // USERS CONTROLLER
         public const string UserController = "api/[controller]";

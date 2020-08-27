@@ -29,7 +29,7 @@
 
             if (!productsValid)
             {
-                return this.BadRequest("Product Id does not exist.");
+                return this.BadRequest(ExceptionsHelper.ProductIdNotExist);
             }
 
             // Creates a new order.
@@ -57,8 +57,7 @@
 
             if (!orderIdValid)
             {
-                // Todo: Remove magic string
-                return this.NotFound("An order with this id does not exist.");
+                return this.NotFound(ExceptionsHelper.OrderNotExist);
             }
 
             // Validates if the currently logged user is the user who made the order.
@@ -67,8 +66,7 @@
 
             if (!userAbleToModifyOrder)
             {
-                // Todo: Remove magic string
-                return this.BadRequest("You don't have permission to modify this order.");
+                return this.BadRequest(ExceptionsHelper.NotAbleToModify);
             }
 
             // Validates if the new order status is valid.
@@ -76,8 +74,7 @@
 
             if (!orderStatusValid)
             {
-                // Todo: Remove magic string
-                return this.BadRequest("Order status is not valid.");
+                return this.BadRequest(ExceptionsHelper.OrderStatusNotValid);
             }
 
             // Changes order status.
