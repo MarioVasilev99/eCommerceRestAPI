@@ -32,5 +32,14 @@
             await this.ordersService.CreateOrderAsync(userId, orderProductsInfo);
             return this.Ok();
         }
+
+        [HttpGet("all/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetUserOrders(int userId)
+        {
+            var orders = await this.ordersService.GetUserOrdersAsync(userId);
+
+            return this.Ok(orders);
+        }
     }
 }

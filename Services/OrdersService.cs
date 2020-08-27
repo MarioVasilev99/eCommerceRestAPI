@@ -1,6 +1,7 @@
 ﻿namespace eCommerceRestAPI.Services
 {
     using eCommerceRestAPI.Dtos.Input.Orders;
+    using eCommerceRestAPI.Dtos.Output;
     using eCommerceRestAPI.Models;
     using eCommerceRestAPI.Models.Enums;
     using eCommerceRestAPI.Services.Contracts;
@@ -54,6 +55,25 @@
 
             // Save changes to db.
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<OrderOutputDto>> GetUserOrdersAsync(int userId)
+        {
+            var userOrders = await this.dbContext
+                .Orders
+                .Where(o => o.UserId == userId)
+                .Select(o => new OrderOutputDto()
+                {
+                    Id = o.Id,
+                    UserId = o.UserId,
+                    UserName = o.User.Username,
+                    ProductNames = o.Products.Select(p => p.Product.Name).ToList(),
+                    Status = o.Status.ToString(),
+                    TotalPrice = o.TotalPrice,
+                    CreatedAt = o.CreatedAt.ToString("f"),
+                })
+                .ToListAsync();
+            return userOrders;
         }
 
         public async Task<bool> ValidateProductsAsync(CreateOrderDto orderProducts)
