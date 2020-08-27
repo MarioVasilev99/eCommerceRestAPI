@@ -1,13 +1,14 @@
 ﻿namespace eCommerceRestAPI.Controllers
 {
     using eCommerceRestAPI.Dtos.Input.Orders;
+    using eCommerceRestAPI.Helpers;
     using eCommerceRestAPI.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route(RoutesHelper.OrdersController)]
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersService ordersService;
@@ -17,7 +18,7 @@
             this.ordersService = ordersService;
         }
 
-        [HttpPost("Create")]
+        [HttpPost(RoutesHelper.OrderCreate)]
         [Authorize]
         public async Task<IActionResult> CreateOrder([FromBody]CreateOrderDto orderProductsInfo)
         {
@@ -37,7 +38,7 @@
             return this.Ok();
         }
 
-        [HttpGet("all/{userId}")]
+        [HttpGet(RoutesHelper.OrderGetUserOrders)]
         [Authorize]
         public async Task<IActionResult> GetUserOrders(int userId)
         {
@@ -47,7 +48,7 @@
             return this.Ok(orders);
         }
 
-        [HttpPost("status/change")]
+        [HttpPost(RoutesHelper.OrderChangeStatus)]
         [Authorize]
         public async Task<IActionResult> ChangeOrderStatus([FromBody]ChangeOrderStatusDto orderStatusDto)
         {

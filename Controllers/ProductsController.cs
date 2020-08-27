@@ -1,6 +1,7 @@
 ﻿namespace eCommerceRestAPI.Controllers
 {
     using eCommerceRestAPI.Dtos.Input.Products;
+    using eCommerceRestAPI.Helpers;
     using eCommerceRestAPI.Models;
     using eCommerceRestAPI.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,7 @@
     using System.Threading.Tasks;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route(RoutesHelper.ProductsController)]
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService productsService;
@@ -22,7 +23,7 @@
         }
 
         // This method returns all of the products in the database.
-        [HttpGet("All")]
+        [HttpGet(RoutesHelper.GetAllProducts)]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts()
         {
@@ -31,7 +32,7 @@
         }
 
         // This method checks if a product with the passed id exists and returns it to the user.
-        [HttpGet("byId/{id}")]
+        [HttpGet(RoutesHelper.GetProductById)]
         [AllowAnonymous]
         public async Task<IActionResult> GetProductById(int id)
         {
@@ -45,7 +46,7 @@
         }
 
         // This method creates a new product.
-        [HttpPost("Create")]
+        [HttpPost(RoutesHelper.CreateProduct)]
         [Authorize]
         public async Task<IActionResult> CreateProduct([FromBody]ProductCreationDto productInfo)
         {
@@ -57,7 +58,7 @@
 
         // This method checks if a product with the passed id exists and deletes it.
         // Returns: OK if a product is found. Not Found if product does not exist.
-        [HttpDelete("Delete/{productId}")]
+        [HttpDelete(RoutesHelper.DeleteProduct)]
         [Authorize]
         public async Task<IActionResult> DeleteProduct(int productId)
         {

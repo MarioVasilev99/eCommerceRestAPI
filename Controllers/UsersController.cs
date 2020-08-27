@@ -1,6 +1,7 @@
 ﻿namespace eCommerceRestAPI.Controllers
 {
     using eCommerceRestAPI.Dtos.Input.Users;
+    using eCommerceRestAPI.Helpers;
     using eCommerceRestAPI.Models;
     using eCommerceRestAPI.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@
     using System.Threading.Tasks;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route(RoutesHelper.UserController)]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;
@@ -20,7 +21,7 @@
             this.usersService = usersService;
         }
 
-        [HttpPost("Login")]
+        [HttpPost(RoutesHelper.UserLogin)]
         [AllowAnonymous]
         public IActionResult Login([FromBody]UserLoginDto login)
         {
@@ -41,7 +42,7 @@
             return response;
         }
 
-        [HttpPost("Register")]
+        [HttpPost(RoutesHelper.UserRegister)]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]UserRegisterDto register)
         {
